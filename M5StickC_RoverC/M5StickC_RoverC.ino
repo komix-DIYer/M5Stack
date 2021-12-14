@@ -159,11 +159,6 @@ void loop()
         if( udodata[6] != 0x64 )
         //if( udodata[6] < 20 || udodata[6] > 180 )
         { 
-          // PWM level
-          // http://blog.robotakao.jp/blog-entry-379.html
-          if ( ( udodata[6] <  20 ) && degree > 25 + 2 ) degree = degree - 2;
-          if ( ( udodata[6] > 180 ) && degree < 75 - 2 ) degree = degree + 2;
-          
           // WireをM5StickCの無使用ピン36に一時的に割り当て
           // https://qiita.com/coppercele/items/2c4e6c84a7a96e348dc1#%E3%82%B0%E3%83%AA%E3%83%83%E3%83%91%E3%82%92%E5%8B%95%E3%81%8B%E3%81%99
           // 分解能別最大周波数
@@ -179,9 +174,15 @@ void loop()
             ledcSetup(0, 50, 10); // (Ch. ID, PWM freq. [Hz], PWM res. [bit] (10 bit: 0~1024), 0~90°:25~75)
             ledcAttachPin(26, 0);
           }
+          
+          // PWM level
+          // http://blog.robotakao.jp/blog-entry-379.html
+          if ( ( udodata[6] <  20 ) && degree > 25 + 2 ) degree = degree - 2;
+          if ( ( udodata[6] > 180 ) && degree < 75 - 2 ) degree = degree + 2;
+          
           // サーボを任意角度に設定
           ledcWrite(0, degree);
-          delay(200);
+          //delay(200);
           //isGRASPING = false;
           //// 26を解放
           //ledcDetachPin(26);
